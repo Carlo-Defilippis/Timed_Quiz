@@ -4,30 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<meta name="Description" content="Enter your description here"/>
+<meta name="High Score List" content="List of all high scores, saved on local machine"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="./script.js"></script>
 <title>Title</title>
 </head>
     <body>
+
+        <nav class="jumbotron text-center">
+            <a class="navbar-brand ml-auto" href="./index.html">
+                <h1>Retake Quiz</h1>
+            </a>
+    
+        </nav>
+
         <div class="clearfix container-fluid text-center">
-          <div class="card row mx-auto">
-              
-            <div>
-            <h2>Please enter your initials!</h2>
-            <form method="POST">
-              <div class="input-group">
-                <input class="mx-auto row" type="text" name="initials" id="initials" placeholder="Your Initials" />
-              </div>
-              <div id="msg"></div>
-              <button id="sign-up row">Submit</button>
-            </form>
-          </div>
+          <div class="card row mx-5">
+            <form>
+                <div class="form-group">
+                  <label for="initials">Enter Initials</label>
+                  <input type="text" name="initialsName" class="form-control" id="initials" aria-describedby="initials" required>
+                  <small id="emailHelp" class="form-text text-muted">Enter your initials to be stored in the high score list.</small>
+                </div>
+                <button type="submit" class="btn btn-primary submit">Submit</button>
+              </form>
           
           </div>
         </div>
-        <script src="./script.js"></script>
+        <div class="container-fluid text-center">
+            <ol class="highscoreslist">
+
+            </ol>
+        </div>
+<script src="./script.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>

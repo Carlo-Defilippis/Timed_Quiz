@@ -11,16 +11,6 @@ var answers = [
   { "1": "Green", "2": "Violet", "3": "Yellow", "4": "Blue" },
 ];
 
-console.log(
-  questionsAnswers.length,
-  answers[0][4],
-  answers[0][3],
-  answers[0][2],
-  typeof parseInt(answers[0][1]),
-  answers[0][2],
-  answers[0][2]
-);
-
 var userScore = 0;
 
 $("#userScoreHTML").text(userScore);
@@ -32,7 +22,7 @@ $(".answers4").text(answers[0][4]);
 
 var index = 0;
 
-$(".answers").on("click", function () {
+$(".answers").on("click", function() {
   var buttonPressed = $(this).val();
 
   if (parseInt(buttonPressed) === parseInt(questionsAnswers[index].answer)) {
@@ -47,6 +37,8 @@ $(".answers").on("click", function () {
     $("#userScoreHTML").text(userScore);
     } else {
         $("#userScoreHTML").text(userScore);
+        localStorage.setItem("userScoreFinal", userScore);
+        window.location.href = "./highscore.html";
     }
   } else {
            index++;
@@ -58,8 +50,58 @@ $(".answers").on("click", function () {
            $(".answers4").text(answers[index][4]);
            } else {
                $("#userScoreHTML").text(userScore);
+               localStorage.setItem("userScoreFinal", userScore);
+               window.location.href = "./highscore.html";
            }
         }
 });
 
-console.log(questionsAnswers[1].question, questionsAnswers[0].answer);
+for(var i=0, len=localStorage.length; i<len; i++) {
+    var key = localStorage.key(i);
+    var value = localStorage[key];
+}
+console.log(key, value)
+
+var playerInitials;
+var playerScore;
+var gameResult = {};
+var existingScores = JSON.parse(localStorage.getItem("highscoreList"));
+if(existingScores == null) highscoreList = [];
+
+
+
+function toHighscoreList(arg1) {
+    // localStorage.getItem("myList", myList);
+    playerInitials = $("#initials").val();
+    playerScore = arg1;
+    gameResult = {player: playerInitials, score: playerScore};
+    highscoreList.push(gameResult)
+    var newTest = $.extend(gameResult, highscoreList)
+    highscoreList.sort(function(a,b) { 
+        return (b.score - a.score ) 
+    });
+    // var myList = $(".highscoreslist").append("<li>" + gameResult.player + " - score: "+ gameResult.score + "</li>");
+    // localStorage.setItem("myList", myList)
+    localStorage.setItem("highScoreList", JSON.stringify(highscoreList));
+    console.log(newTest, "This is new test")
+    console.log(highscoreList, "This is high score list")
+};
+
+var lockSubmit = false;
+
+
+
+$(".submit").on("click", function(event) {
+    event.preventDefault();
+    if (lockSubmit === false) {
+    var finalScore = localStorage.getItem("userScoreFinal");
+    console.log(finalScore, "This is a test");
+    lockSubmit = true;
+    console.log(lockSubmit)
+    toHighscoreList(finalScore)
+    var savedList = JSON.parse(localStorage.getItem("highScoreList"))
+    console.log(savedList)
+    } else {
+        alert("Cannot submit results twice, sorry! Please play again to record another score.")
+    }
+})
