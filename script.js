@@ -1,3 +1,17 @@
+var count = 60;
+var interval = setInterval(function(){
+  document.getElementById('count').innerHTML=count;
+  count--;
+  if (count === 0){
+    clearInterval(interval);
+    document.getElementById('count').innerHTML='Done';
+    // or...
+    localStorage.setItem("userScoreFinal", userScore);
+    window.location.href = "./highscore.html";
+  }
+}, 1000);
+
+
 var questionsAnswers = [
   { question: "Whats the capital of Texas?", answer: 3 },
   { question: "What color is the sky?", answer: 1 },
@@ -63,33 +77,30 @@ for(var i=0, len=localStorage.length; i<len; i++) {
 console.log(key, value)
 
 var playerInitials;
-var playerScore;
 var gameResult = {};
 var existingScores = JSON.parse(localStorage.getItem("highscoreList"));
 if(existingScores == null) highscoreList = [];
 
 
 
-function toHighscoreList(arg1) {
-    // localStorage.getItem("myList", myList);
+function toHighscoreList() {
+    localStorage.getItem("myList", myList);
+    localStorage.getItem("highScoreList", highscoreList);
     playerInitials = $("#initials").val();
-    playerScore = arg1;
     gameResult = {player: playerInitials, score: playerScore};
     highscoreList.push(gameResult)
-    var newTest = $.extend(gameResult, highscoreList)
     highscoreList.sort(function(a,b) { 
         return (b.score - a.score ) 
     });
-    // var myList = $(".highscoreslist").append("<li>" + gameResult.player + " - score: "+ gameResult.score + "</li>");
-    // localStorage.setItem("myList", myList)
-    localStorage.setItem("highScoreList", JSON.stringify(highscoreList));
-    console.log(newTest, "This is new test")
-    console.log(highscoreList, "This is high score list")
+    var myList = $(".highscoreslist").prepend("<li>" + gameResult.player + " - score: "+ gameResult.score + "</li>");
+    localStorage.setItem("myList", myList)
 };
 
 var lockSubmit = false;
 
-
+function setStorage() {
+  localStorage.setItem("highScoreList", JSON.stringify(highscoreList));
+}
 
 $(".submit").on("click", function(event) {
     event.preventDefault();
@@ -98,7 +109,8 @@ $(".submit").on("click", function(event) {
     console.log(finalScore, "This is a test");
     lockSubmit = true;
     console.log(lockSubmit)
-    toHighscoreList(finalScore)
+    toHighscoreList();
+    setStorage();
     var savedList = JSON.parse(localStorage.getItem("highScoreList"))
     console.log(savedList)
     } else {
