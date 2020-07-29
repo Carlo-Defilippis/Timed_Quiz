@@ -1,10 +1,8 @@
 var count = 60;
 var interval = setInterval(function(){
-  document.getElementById('count').innerHTML=count;
   count--;
   if (count === 0){
     clearInterval(interval);
-    document.getElementById('count').innerHTML='Done';
     // or...
     localStorage.setItem("userScoreFinal", userScore);
     window.location.href = "./highscore.html";
@@ -74,33 +72,36 @@ for(var i=0, len=localStorage.length; i<len; i++) {
     var key = localStorage.key(i);
     var value = localStorage[key];
 }
-console.log(key, value)
+console.log("This is the Key and Value: ", key, value)
 
 var playerInitials;
+var playerScore;
 var gameResult = {};
-var existingScores = JSON.parse(localStorage.getItem("highscoreList"));
-if(existingScores == null) highscoreList = [];
 
-
-
-function toHighscoreList() {
+function toHighscoreList(playerScore) {
+    event.preventDefault();
     localStorage.getItem("myList", myList);
-    localStorage.getItem("highScoreList", highscoreList);
+    // var highscoreList = JSON.parse(localStorage.getItem("highscoreList"));
+    // if(highscoreList == null) {
+    //   highscoreList = [];
+    //   console.log("highscoreList did not exist")
+    // }
     playerInitials = $("#initials").val();
     gameResult = {player: playerInitials, score: playerScore};
-    highscoreList.push(gameResult)
-    highscoreList.sort(function(a,b) { 
-        return (b.score - a.score ) 
-    });
-    var myList = $(".highscoreslist").prepend("<li>" + gameResult.player + " - score: "+ gameResult.score + "</li>");
+    var JSONreadyplayer = JSON.stringify(gameResult)
+    console.log("This is the JSON ready var ", JSONreadyplayer)
+    // highscoreList.push(gameResult);
+    // highscoreList.sort(function(a,b) { 
+    //     return (b.score - a.score ) 
+    // });
+    var myList = $(".highscoreslist").append("<li>" + gameResult.player + " - score: "+ gameResult.score + "</li>");
     localStorage.setItem("myList", myList)
+    localStorage.setItem("highscoreList", JSONreadyplayer);
 };
 
 var lockSubmit = false;
 
-function setStorage() {
-  localStorage.setItem("highScoreList", JSON.stringify(highscoreList));
-}
+
 
 $(".submit").on("click", function(event) {
     event.preventDefault();
@@ -109,10 +110,8 @@ $(".submit").on("click", function(event) {
     console.log(finalScore, "This is a test");
     lockSubmit = true;
     console.log(lockSubmit)
-    toHighscoreList();
-    setStorage();
+    toHighscoreList(finalScore)
     var savedList = JSON.parse(localStorage.getItem("highScoreList"))
-    console.log(savedList)
     } else {
         alert("Cannot submit results twice, sorry! Please play again to record another score.")
     }
