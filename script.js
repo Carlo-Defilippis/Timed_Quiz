@@ -2,7 +2,9 @@ $(document).ready(function() {
 
 $('.myModal').modal('show')
 var startQuiz = false
-var count = 60;
+var count = 1000;
+$(".wrong").hide()
+$(".correct").hide()
 
 function startMe() {
 if (startQuiz === true) {
@@ -11,7 +13,6 @@ if (startQuiz === true) {
     $("#count").text(count)
     if (count === 0){
       clearInterval(interval);
-      // or...
       localStorage.setItem("userScoreFinal", userScore);
       window.location.href = "./highscore.html";
     }
@@ -70,10 +71,11 @@ $(".answers").on("click", function(event) {
   if (parseInt(buttonPressed) === parseInt(questionsAnswers[index].answer)) {
     index++;
     userScore++;
-    successAnswer()
+    $(".correct").show()
     setInterval(function() {
       myPause--
       if (myPause === 0) {
+        $(".correct").hide()
     if (questionsAnswers.length > index) {
       renderAnswer();
     } else {
@@ -85,11 +87,12 @@ $(".answers").on("click", function(event) {
   }, 1000);
   } else {
           index++;
+          $(".wrong").show()
           count -= 5
-          wrongAnswer()
           setInterval(function() {
           myPause--
             if (myPause === 0) {
+              $(".wrong").hide()
            if (questionsAnswers.length > index) {
             renderAnswer();
            } else {
@@ -108,18 +111,6 @@ $(".answers").on("click", function(event) {
 //     var value = localStorage[key];
 //     console.log("This is the Key and Value: ", key, value)
 // }
-function successAnswer() {
-$('.answers').click(function() {
-  $(this).toggleClass('btn-primary').toggleClass('btn-success');
-});
-}
-
-function wrongAnswer() {
-  $('.answers').click(function() {
-    $(this).toggleClass('btn-primary').toggleClass('btn-danger');
-  });
-  }
-
 
 var playerInitials;
 var gameResult = {};
