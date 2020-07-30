@@ -38,6 +38,14 @@
 
             </ol>
         </div>
+        <script type="text/javascript">
+          var localStore = JSON.parse(localStorage.getItem("highscoreList"))
+          if (localStore !== undefined) {
+            console.log("code in html was called")
+            var myLocal = $(".highscoreslist").append("<li>" + localStore.player + " - score: "+ localStore.score + "</li>");
+          }
+
+        </script>
 <script src="./script.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>

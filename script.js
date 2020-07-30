@@ -1,15 +1,29 @@
-var count = 60;
-var interval = setInterval(function(){
-  count--;
-  $("#count").text(count)
-  if (count === 0){
-    clearInterval(interval);
-    // or...
-    localStorage.setItem("userScoreFinal", userScore);
-    window.location.href = "./highscore.html";
-  }
-}, 1000);
+$(document).ready(function() {
 
+$('.myModal').modal('show')
+var startQuiz = false
+var count = 60;
+
+function startMe() {
+if (startQuiz === true) {
+  var interval = setInterval(function(){
+    count--;
+    $("#count").text(count)
+    if (count === 0){
+      clearInterval(interval);
+      // or...
+      localStorage.setItem("userScoreFinal", userScore);
+      window.location.href = "./highscore.html";
+    }
+  }, 1000);
+  }
+}
+
+$(".startQuiz").on("click", function() {
+  $('.myModal').modal('hide');
+  startQuiz = true;
+  startMe();
+});
 
 var questionsAnswers = [
   { question: "How many pairs of ribs would the normal human have?", answer: 3 },
@@ -50,12 +64,16 @@ $(".answers4").text(answers[index][4]);
 $("#userScoreHTML").text(userScore);
 }
 
-$(".answers").on("click", function() {
+$(".answers").on("click", function(event) {
   var buttonPressed = $(this).val();
-
+  var myPause = 1;
   if (parseInt(buttonPressed) === parseInt(questionsAnswers[index].answer)) {
     index++;
     userScore++;
+    successAnswer()
+    setInterval(function() {
+      myPause--
+      if (myPause === 0) {
     if (questionsAnswers.length > index) {
       renderAnswer();
     } else {
@@ -63,8 +81,15 @@ $(".answers").on("click", function() {
         localStorage.setItem("userScoreFinal", userScore);
         window.location.href = "./highscore.html";
     }
+  }
+  }, 1000);
   } else {
-           index++;
+          index++;
+          count -= 5
+          wrongAnswer()
+          setInterval(function() {
+          myPause--
+            if (myPause === 0) {
            if (questionsAnswers.length > index) {
             renderAnswer();
            } else {
@@ -73,6 +98,9 @@ $(".answers").on("click", function() {
                window.location.href = "./highscore.html";
            }
         }
+      }, 1000);
+  }
+  event.stopImmediatePropagation();
 });
 
 // for(var i=0, len=localStorage.length; i<len; i++) {
@@ -80,14 +108,25 @@ $(".answers").on("click", function() {
 //     var value = localStorage[key];
 //     console.log("This is the Key and Value: ", key, value)
 // }
+function successAnswer() {
+$('.answers').click(function() {
+  $(this).toggleClass('btn-primary').toggleClass('btn-success');
+});
+}
+
+function wrongAnswer() {
+  $('.answers').click(function() {
+    $(this).toggleClass('btn-primary').toggleClass('btn-danger');
+  });
+  }
 
 
 var playerInitials;
-var playerScore;
 var gameResult = {};
 
 function toHighscoreList(playerScore) {
-    event.preventDefault();
+  event.preventDefault();  
+  console.log("toHighscoreList function was called ")
     localStorage.getItem("myList", myList);
     // var highscoreList = JSON.parse(localStorage.getItem("highscoreList"));
     // if(highscoreList == null) {
@@ -97,7 +136,6 @@ function toHighscoreList(playerScore) {
     playerInitials = $("#initials").val();
     gameResult = {player: playerInitials, score: playerScore};
     var JSONreadyplayer = JSON.stringify(gameResult)
-    console.log("This is the JSON ready var ", JSONreadyplayer)
     // highscoreList.push(gameResult);
     // highscoreList.sort(function(a,b) { 
     //     return (b.score - a.score ) 
@@ -110,15 +148,15 @@ function toHighscoreList(playerScore) {
 var lockSubmit = false;
 
 $(".submit").on("click", function(event) {
-    event.preventDefault();
+    console.log("Submit button was hit")
     if (lockSubmit === false) {
     var finalScore = localStorage.getItem("userScoreFinal");
     console.log(finalScore, "This is a test");
-    lockSubmit = true;
-    console.log(lockSubmit)
     toHighscoreList(finalScore)
-    var savedList = JSON.parse(localStorage.getItem("highScoreList"))
+    lockSubmit = true;
     } else {
         alert("Cannot submit results twice, sorry! Please play again to record another score.")
     }
+    event.stopImmediatePropagation();
+});
 });
