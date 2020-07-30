@@ -1,6 +1,7 @@
 var count = 60;
 var interval = setInterval(function(){
   count--;
+  $("#count").text(count)
   if (count === 0){
     clearInterval(interval);
     // or...
@@ -11,28 +12,43 @@ var interval = setInterval(function(){
 
 
 var questionsAnswers = [
-  { question: "Whats the capital of Texas?", answer: 3 },
-  { question: "What color is the sky?", answer: 1 },
-  { question: "What shape is a warning sign?", answer: 3 },
-  { question: "What color is the ocean?", answer: 4 },
+  { question: "How many pairs of ribs would the normal human have?", answer: 3 },
+  { question: "Who wrote the classic novel Les Miserables?", answer: 4 },
+  { question: "Which actress played the part of Sybil Fawlty in Television?s Fawlty Towers?", answer: 2 },
+  { question: "What was the title of Beethoven's only opera?", answer: 2 },
+  { question: "Which river flows through the city of Dublin?", answer: 1 },
+  { question: "Who appeared with David McCallum in the title role of the TV series Sapphire and Steel?", answer: 4 },
+  { question: "Which Irishman won the Tour de France in 1987?", answer: 1 },
+  { question: "In which European country is Cro-Magnon, famous for the discovery of four Palaeolithic skeletons in 1868?", answer: 2 },
+  { question: "Who was dedicated to killing Moby Dick?", answer: 2 },
+  { question: "In which city is the Sacre Coeur?", answer: 3 }
 ];
 var answers = [
-  { "1": "San Diego", "2": "Orlando", "3": "Houston", "4": "New York" },
-  { "1": "Blue", "2": "Orange", "3": "Yellow", "4": "Black" },
-  { "1": "Octagon", "2": "Circle", "3": "Diamond", "4": "Square" },
-  { "1": "Green", "2": "Violet", "3": "Yellow", "4": "Blue" },
+  { "1": "36", "2": "20", "3": "12", "4": "60" },
+  { "1": "Upton Sinclair", "2": "June Rebellion", "3": "Jean Valjean", "4": "Victor Hugo" },
+  { "1": "Connie Booth", "2": "Prunella Margaret Rumney West Scales", "3": "Gilly Flower", "4": "Joan Sanderson" },
+  { "1": "Leonore", "2": "Fidelio", "3": "Liebe", "4": "Der Triumph" },
+  { "1": "River Liffey", "2": "River Nile", "3": "River Poddle", "4": "River Camac" },
+  { "1": "PJ Hammond", "2": "David Collings", "3": "Don Houghton", "4": "Joanna Lumley" },
+  { "1": "Stephen Roche", "2": "Lech Piasecki", "3": "Laurent Fignon", "4": "Giro d'Italia" },
+  { "1": "Ireland", "2": "France", "3": "Italy", "4": "Germany" },
+  { "1": "Charlie", "2": "Ahab", "3": "Wilson", "4": "Johnson" },
+  { "1": "San Diego", "2": "Rome", "3": "Paris", "4": "New York" }
 ];
 
-var userScore = 0;
-
-$("#userScoreHTML").text(userScore);
-$("#question").text(questionsAnswers[0].question);
-$(".answers1").text(answers[0][1]);
-$(".answers2").text(answers[0][2]);
-$(".answers3").text(answers[0][3]);
-$(".answers4").text(answers[0][4]);
-
 var index = 0;
+var userScore = 0;
+renderAnswer()
+
+function renderAnswer() {
+$("#userScoreHTML").text(userScore);
+$("#question").text(questionsAnswers[index].question);
+$(".answers1").text(answers[index][1]);
+$(".answers2").text(answers[index][2]);
+$(".answers3").text(answers[index][3]);
+$(".answers4").text(answers[index][4]);
+$("#userScoreHTML").text(userScore);
+}
 
 $(".answers").on("click", function() {
   var buttonPressed = $(this).val();
@@ -41,12 +57,7 @@ $(".answers").on("click", function() {
     index++;
     userScore++;
     if (questionsAnswers.length > index) {
-    $("#question").text(questionsAnswers[index].question);
-    $(".answers1").text(answers[index][1]);
-    $(".answers2").text(answers[index][2]);
-    $(".answers3").text(answers[index][3]);
-    $(".answers4").text(answers[index][4]);
-    $("#userScoreHTML").text(userScore);
+      renderAnswer();
     } else {
         $("#userScoreHTML").text(userScore);
         localStorage.setItem("userScoreFinal", userScore);
@@ -55,11 +66,7 @@ $(".answers").on("click", function() {
   } else {
            index++;
            if (questionsAnswers.length > index) {
-           $("#question").text(questionsAnswers[index].question);
-           $(".answers1").text(answers[index][1]);
-           $(".answers2").text(answers[index][2]);
-           $(".answers3").text(answers[index][3]);
-           $(".answers4").text(answers[index][4]);
+            renderAnswer();
            } else {
                $("#userScoreHTML").text(userScore);
                localStorage.setItem("userScoreFinal", userScore);
@@ -68,11 +75,12 @@ $(".answers").on("click", function() {
         }
 });
 
-for(var i=0, len=localStorage.length; i<len; i++) {
-    var key = localStorage.key(i);
-    var value = localStorage[key];
-}
-console.log("This is the Key and Value: ", key, value)
+// for(var i=0, len=localStorage.length; i<len; i++) {
+//     var key = localStorage.key(i);
+//     var value = localStorage[key];
+//     console.log("This is the Key and Value: ", key, value)
+// }
+
 
 var playerInitials;
 var playerScore;
@@ -101,8 +109,6 @@ function toHighscoreList(playerScore) {
 
 var lockSubmit = false;
 
-
-
 $(".submit").on("click", function(event) {
     event.preventDefault();
     if (lockSubmit === false) {
@@ -115,4 +121,4 @@ $(".submit").on("click", function(event) {
     } else {
         alert("Cannot submit results twice, sorry! Please play again to record another score.")
     }
-})
+});
