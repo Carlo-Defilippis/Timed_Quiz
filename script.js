@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 $('.myModal').modal('show')
 var startQuiz = false
-var count = 1000;
+var count = 60;
 $(".wrong").hide()
 $(".correct").hide()
 
